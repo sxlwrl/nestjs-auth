@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Delete,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   UseGuards,
@@ -18,6 +20,7 @@ export class UsersController {
   @UseGuards(UserExistsGuard)
   @UseGuards(AccessGuard)
   @Patch(':id')
+  @HttpCode(HttpStatus.OK)
   updateUser(@Param('id') id: string, @Body() data: UpdateUserDto) {
     return this.usersService.updateUser(Number(id), data);
   }
@@ -25,6 +28,7 @@ export class UsersController {
   @UseGuards(UserExistsGuard)
   @UseGuards(AccessGuard)
   @Delete(':id')
+  @HttpCode(HttpStatus.OK)
   deleteUser(@Param('id') id: string) {
     return this.usersService.deleteUser(Number(id));
   }
