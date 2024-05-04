@@ -4,6 +4,8 @@ import { Prisma, User } from '@prisma/client';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -23,6 +25,11 @@ export class UsersService {
   }
 
   async updateUser(userId: number, data: UpdateUserDto): Promise<User> {
+    if (data.password) {
+      const password = await bcrypt.hash(data.password, 12);
+      data = { ...data, password };
+    }
+
     return this.prismaService.user.update({
       where: {
         id: userId,
